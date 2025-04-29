@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clipboard History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded shadow w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">Clipboard History</h1>
+    <button onclick="readClipboard()" class="border px-4 py-2 mb-4 w-full">Check Clipboard</button>
+    <ul id="history" class="space-y-2 max-h-64 overflow-y-auto border p-2 rounded"></ul>
+  </div>
+
+  <script>
+    const historyList = []
+
+    async function readClipboard() {
+      try {
+        const text = await navigator.clipboard.readText()
+        if (text && !historyList.includes(text)) {
+          historyList.unshift(text)
+          renderHistory()
+        }
+      } catch (err) {
+        alert('Clipboard access denied or unavailable.')
+      }
+    }
+
+    function renderHistory() {
+      const ul = document.getElementById('history')
+      ul.innerHTML = ''
+      historyList.forEach((item, i) => {
+        const li = document.createElement('li')
+        li.className = 'border p-2 rounded bg-gray-50'
+        li.textContent = item
+        ul.appendChild(li)
+      })
+    }
+  </script>
+</body>
+</html>
